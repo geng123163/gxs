@@ -19,7 +19,7 @@
             width: 300px;
             padding: 10px;
             margin: 10px 0;
-            font-size: 20px;
+            font-size: 26px;
             padding-right: 40px; /* 为删除按钮预留空间 */
         }
         #clearBtn {
@@ -27,13 +27,17 @@
             right: 10px;
             background: none;
             border: none;
-            font-size: 38px;
+            font-size: 25px;
             cursor: pointer;
-            color: #800080;
-            display: none; /* 默认隐藏 */
+            color: #666;
+            /* 始终显示，移除默认隐藏设置 */
         }
         #clearBtn:hover {
             color: #333;
+        }
+        #clearBtn:disabled {
+            color: #ccc;
+            cursor: default;
         }
         #generateBtn {
             padding: 10px 20px;
@@ -73,6 +77,15 @@
         const message = document.getElementById('message');
         const clearBtn = document.getElementById('clearBtn');
 
+        // 控制删除按钮状态
+        function updateClearButton() {
+            // 始终启用按钮，无论输入框是否有内容
+            clearBtn.disabled = false;
+        }
+
+        // 页面加载完成后初始化按钮状态
+        window.addEventListener('DOMContentLoaded', updateClearButton);
+
         // 点击生成按钮
         generateBtn.addEventListener('click', () => {
             const email = emailInput.value.trim();
@@ -97,14 +110,11 @@
         clearBtn.addEventListener('click', () => {
             emailInput.value = '';
             message.textContent = '';
-            clearBtn.style.display = 'none';
             emailInput.focus();
         });
 
-        // 输入框内容变化时显示/隐藏删除按钮
-        emailInput.addEventListener('input', () => {
-            clearBtn.style.display = emailInput.value ? 'block' : 'none';
-        });
+        // 输入框内容变化时更新按钮状态
+        emailInput.addEventListener('input', updateClearButton);
 
         // 回车键提交
         emailInput.addEventListener('keypress', (e) => {
@@ -112,14 +122,6 @@
                 generateBtn.click();
             }
         });
-
-        // 初始检查输入框状态
-        if (emailInput.value) {
-            clearBtn.style.display = 'block';
-        }
     </script>
 </body>
 </html>
-
-
-
